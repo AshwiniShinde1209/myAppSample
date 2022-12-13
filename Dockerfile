@@ -34,20 +34,22 @@ RUN git clone -b Pacemaker-2.1.5 -- https://github.com/ClusterLabs/pacemaker.git
 #RUN apt-get install autopoint
 #WORKDIR pacemaker
 #RUN cd pacemaker
-RUN apt-get -y install autopoint gettext
-#RUN apt -y install software-properties-common
-#RUN add-apt-repository ppa:deadsnakes/ppa
-#RUN apt-get -y update
-#RUN apt -y install python3.7
 WORKDIR pacemaker
+RUN apt-get -y install autopoint gettext
+RUN apt update
+RUN apt -y install software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
+#RUN apt-get -y update
+RUN apt -y install python3.9
+#WORKDIR pacemaker
 #RUN python -v
-RUN apt-get update && \
-	apt-get -y install python3
+#RUN apt-get update && \
+#	apt-get -y install python3
 #RUN cd /usr/bin && \
 #	ln -s ./python3 ./python
 RUN ./autogen.sh 
 RUN ./configure 
 RUN make 
 RUN make install
-#RUN make check
+RUN make check
 CMD /etc/init.d/corosync start && /etc/init.d/pacemaker start && /bin/bash
