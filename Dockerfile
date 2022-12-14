@@ -26,7 +26,13 @@ RUN apt-get update && apt-get install -y apt-utils \
         uuid-dev \
         libcmap-dev \
         libquorum-dev \
-        libmcpp-dev
+        libmcpp-dev \
+	libcmocka-dev \
+	automake \
+	libltdl-dev \
+	libqb-dev \
+	autopoint \
+	gettext
 
 RUN git clone -b Pacemaker-2.1.5 -- https://github.com/ClusterLabs/pacemaker.git
 #	cd pacemaker
@@ -35,21 +41,28 @@ RUN git clone -b Pacemaker-2.1.5 -- https://github.com/ClusterLabs/pacemaker.git
 #WORKDIR pacemaker
 #RUN cd pacemaker
 WORKDIR pacemaker
-RUN apt-get -y install autopoint gettext
+#RUN apt-get -y install autopoint gettext
 RUN apt update
 RUN apt -y install software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
 #RUN apt-get -y update
 RUN apt -y install python3.9
+
 #WORKDIR pacemaker
 #RUN python -v
 #RUN apt-get update && \
 #	apt-get -y install python3
 #RUN cd /usr/bin && \
 #	ln -s ./python3 ./python
+
 RUN ./autogen.sh 
 RUN ./configure 
 RUN make 
 RUN make install
+#RUN apt-get update && \
+#	apt-get -y install libcmocka-dev \
+#	automake \
+#	libltdl-dev \
+#	libqb-dev 
 RUN make check
 CMD /etc/init.d/corosync start && /etc/init.d/pacemaker start && /bin/bash
